@@ -6,11 +6,17 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$("#name").focus();
 			$("#inputForm").validate({
 				submitHandler: function(form){
-					loading('正在提交，请稍等...');
-					form.submit();
+					if($("#files").val()){
+						s();
+					}else{
+						confirmx("当前没有选择任何文件,是否保存?", s);
+					}
+					function s(){
+						loading('正在提交，请稍等...');
+						form.submit();
+					}
 				},
 				errorContainer: "#messageBox",
 				errorPlacement: function(error, element) {
@@ -31,22 +37,22 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="testTree" action="${ctx}/pm/pmTree/saveMy" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		<form:hidden path="name"/>
+		<form:hidden path="sort"/>
 		<sys:message content="${message}"/>		
+		<div class="control-group">
+			<label class="control-label">项目名称：</label>
+			<div class="controls">
+				${testTree.parent==null?testTree.name:testTree.parent.name}
+			</div>
+			</div>
 		<div class="control-group">
 			<label class="control-label">名称：</label>
 			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="100" class="input-xlarge required"/>
-				<span class="help-inline"><font color="red">*</font> </span>
+				${testTree.name}
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">排序：</label>
-			<div class="controls">
-				<form:input path="sort" htmlEscape="false" maxlength="10" class="input-xlarge required digits"/>
-				<span class="help-inline"><font color="red">*</font> </span>
-			</div>
-		</div>
-		<div class="control-group">
+			<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>

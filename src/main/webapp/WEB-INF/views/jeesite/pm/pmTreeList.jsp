@@ -28,6 +28,9 @@
 		function addRow(list, tpl, data, pid, root){
 			for (var i=0; i<data.length; i++){
 				var row = data[i];
+				if(row.parentId == "0"){
+					row.showadd = true;
+				}
 				if ((${fns:jsGetVal('row.parentId')}) == pid){
 					$(list).append(Mustache.render(tpl, {
 						dict: {
@@ -41,8 +44,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/pm/pmTree/">树结构列表</a></li>
-		<shiro:hasPermission name="pm:pmTree:edit"><li><a href="${ctx}/pm/pmTree/form">树结构添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/pm/pmTree/">项目列表</a></li>
+		<shiro:hasPermission name="pm:pmTree:edit"><li><a href="${ctx}/pm/pmTree/form">项目添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="pmTree" action="${ctx}/pm/pmTree/" method="post" class="breadcrumb form-search">
 		<ul class="ul-form">
@@ -82,8 +85,10 @@
 			</td>
 			<shiro:hasPermission name="pm:pmTree:edit"><td>
    				<a href="${ctx}/pm/pmTree/form?id={{row.id}}">修改</a>
-				<a href="${ctx}/pm/pmTree/delete?id={{row.id}}" onclick="return confirmx('确认要删除该树结构及所有子树结构吗？', this.href)">删除</a>
-				<a href="${ctx}/pm/pmTree/form?parent.id={{row.id}}">添加下级树结构</a> 
+				<a href="${ctx}/pm/pmTree/delete?id={{row.id}}" onclick="return confirmx('确认要删除该项目/目录吗？', this.href)">删除</a>
+				{{#row.showadd}}
+				<a href="${ctx}/pm/pmTree/form?parent.id={{row.id}}">添加目录</a>
+				{{/row.showadd}}
 			</td></shiro:hasPermission>
 		</tr>
 	</script>

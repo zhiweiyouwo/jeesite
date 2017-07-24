@@ -36,6 +36,14 @@ public class PmTreeService extends TreeService<PmTreeDao, PmTree> {
 	@Transactional(readOnly = false)
 	public void save(PmTree testTree) {
 		super.save(testTree);
+		if(testTree.getParent().getId() == "0"){
+			PmTree gk = new PmTree();
+			gk.setParent(testTree);
+			gk.setName("概况");
+			gk.setSort(1);
+			super.save(gk);
+		}
+		
 	}
 	
 	@Transactional(readOnly = false)

@@ -27,8 +27,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/pm/pmTree/">树结构列表</a></li>
-		<li class="active"><a href="${ctx}/pm/pmTree/form?id=${pmTree.id}&parent.id=${testTreeparent.id}">树结构<shiro:hasPermission name="pm:pmTree:edit">${not empty testTree.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pm:pmTree:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/pm/pmTree/">项目列表</a></li>
+		<li class="active"><a href="#">${pmTree.parentId=='0'?'项目':'子目录'}<shiro:hasPermission name="pm:pmTree:edit">${not empty testTree.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pm:pmTree:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="testTree" action="${ctx}/pm/pmTree/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -37,9 +37,17 @@
 			<label class="control-label">上级父级编号:</label>
 			<div class="controls">
 				<sys:treeselect id="parent" name="parent.id" value="${pmTree.parent.id}" labelName="parent.name" labelValue="${testTree.parent.name}"
-					title="父级编号" url="/pm/pmTree/treeData" extId="${pmTree.id}" cssClass="" allowClear="true"/>
+					title="父级编号" url="/pm/pmTree/treeData" extId="${pmTree.id}" cssClass="" disabled="disabled" hideBtn="true" allowClear="true"/>
 			</div>
 		</div>
+		<c:if test="${pmTree.parent == null}">
+		<div class="control-group">
+			<label class="control-label">选择访问权限:</label>
+			<div class="controls">
+				
+			</div>
+		</div>
+		</c:if>
 		<div class="control-group">
 			<label class="control-label">名称：</label>
 			<div class="controls">
