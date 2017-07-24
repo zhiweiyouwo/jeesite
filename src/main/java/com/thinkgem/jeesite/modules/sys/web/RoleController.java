@@ -68,7 +68,8 @@ public class RoleController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Role role, Model model) {
 		if (role.getOffice()==null){
-			role.setOffice(UserUtils.getUser().getOffice());
+			//不采用office
+			role.setOffice(officeService.get("1"));
 		}
 		model.addAttribute("role", role);
 		model.addAttribute("menuList", systemService.findAllMenu());
