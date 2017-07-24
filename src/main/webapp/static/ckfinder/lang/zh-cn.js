@@ -115,7 +115,7 @@ CKFinder.lang['zh-cn'] =
 	Upload		: '上传',
 	UploadTip	: '上传文件',
 	Refresh		: '刷新',
-	Settings	: '设置',
+	Settings	: '',
 	Help		: '帮助',
 	HelpTip		: '查看在线帮助',
 
@@ -285,7 +285,7 @@ CKFinder.lang['zh-cn'] =
 
 	Maximize :
 	{
-		maximize : '全屏',
+		maximize : '',
 		minimize : '最小化'
 	},
 

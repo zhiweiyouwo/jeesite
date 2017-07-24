@@ -143,6 +143,13 @@
 		config.width = config.height = '100%';
 		var ckfinder = new CKFinder( config );
 		ckfinder.replace( 'ckfinder', config );
+		setTimeout(hideSetting,1000);
+		function hideSetting(){
+			var obj =document.getElementsByName("CKFinder")[0].contentWindow;
+			//obj.document.getElementById("cke_11").parentNode.style.display= "none";
+			//obj.document.getElementById("cke_12").parentNode.style.display= "none";
+		}
+		
 })();
 //]]>
 	</script>
