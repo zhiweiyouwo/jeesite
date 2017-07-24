@@ -10,8 +10,9 @@ CKFinder.customConfig = function( config )
 	// http://docs.cksource.com/ckfinder_2.x_api/symbols/CKFinder.config.html
 
 	// Sample configuration options:
-	// config.uiColor = '#BDE31E';
-	// config.language = 'fr';
-	// config.removePlugins = 'basket';
+	config.uiColor = '#f7f5f4';
+	config.language = 'zh-cn';
+	config.removePlugins = 'basket,help';
+	config.defaultSortBy = 'date';
 
 };
