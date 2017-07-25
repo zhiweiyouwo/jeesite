@@ -21,6 +21,11 @@
 		for(var i=0; i<files.length; i++){//<c:if test="${type eq 'thumb'}">
 			url += files[i].getThumbnailUrl();//</c:if><c:if test="${type ne 'thumb'}">
 			url += files[i].getUrl();//</c:if>
+			var size = files[i].size+"K";
+			if(files[i].size>1024){
+				size = (files[i].size/1024)+"M";
+			}
+			url +=":::"+files[i].dateF+"&nbsp;&nbsp;&nbsp;"+size;
 			if (i<files.length-1) url+="|";
 		}//<c:if test="${selectMultiple}">
 		$("#${input}").val($("#${input}").val()+($("#${input}").val(url)==""?url:"|"+url));//</c:if><c:if test="${!selectMultiple}">
@@ -43,7 +48,7 @@
 		ckfinderAPI = api;
 	}
 	function ${input}Del(obj){
-		var url = $(obj).prev().attr("url");
+		var url = $(obj).prev().prev().attr("url")+":::"+$(obj).prev().html();
 		$("#${input}").val($("#${input}").val().replace("|"+url,"","").replace(url+"|","","").replace(url,"",""));
 		${input}Preview();
 	}
@@ -55,10 +60,16 @@
 		var li, urls = $("#${input}").val().split("|");
 		$("#${input}Preview").children().remove();
 		for (var i=0; i<urls.length; i++){
+			var u = urls[i];
+			var d = "";
+			if(u.indexOf(":::">0)){
+				u = u.split(":::")[0];
+				d = urls[i].split(":::")[1];
+			}
 			if (urls[i]!=""){//<c:if test="${type eq 'thumb' || type eq 'images'}">
 				li = "<li><img src=\""+urls[i]+"\" url=\""+urls[i]+"\" style=\"max-width:${empty maxWidth ? 200 : maxWidth}px;max-height:${empty maxHeight ? 200 : maxHeight}px;_height:${empty maxHeight ? 200 : maxHeight}px;border:0;padding:3px;\">";//</c:if><c:if test="${type ne 'thumb' && type ne 'images'}">
-				li = "<li><a href=\""+urls[i]+"\" url=\""+urls[i]+"\" target=\"_blank\">"+decodeURIComponent(urls[i].substring(urls[i].lastIndexOf("/")+1))+"</a>";//</c:if>
-				li += "&nbsp;&nbsp;<c:if test="${!readonly}"><a href=\"javascript:\" onclick=\"${input}Del(this);\">×</a></c:if></li>";
+				li = "<li><a href=\""+u+"\" url=\""+u+"\" target=\"_blank\">"+decodeURIComponent(u.substring(u.lastIndexOf("/")+1))+"</a>";//</c:if>
+				li += "&nbsp;&nbsp;&nbsp;&nbsp;<span>"+d+"</span>&nbsp;&nbsp;<c:if test="${!readonly}"><a href=\"javascript:\" onclick=\"${input}Del(this);\">删除</a></c:if></li>";
 				$("#${input}Preview").append(li);
 			}
 		}

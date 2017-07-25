@@ -126,7 +126,7 @@ public class PmTreeController extends BaseController {
 		}
 		pmTreeService.save(testTree);
 		addMessage(redirectAttributes, "保存项目成功");
-		return "redirect:" + Global.getAdminPath() + "/pm/pmTree/detail?id="+testTree.getId();
+		return "redirect:" + Global.getAdminPath() + "/pm/pmTree/detail?id=" + testTree.getId();
 	}
 
 	@RequiresPermissions("pm:pmTree:edit")
@@ -144,6 +144,22 @@ public class PmTreeController extends BaseController {
 			HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<PmTree> list = pmTreeService.findList(new PmTree());
+		gentTree(extId, mapList, list);
+		return mapList;
+	}
+
+	@RequiresPermissions("user")
+	@ResponseBody
+	@RequestMapping(value = "treeDataMy")
+	public List<Map<String, Object>> treeDataMy(@RequestParam(required = false) String extId,  String pname,
+			HttpServletRequest request, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		List<PmTree> list = pmTreeService.findList(new PmTree());
+		gentTree(extId, mapList, list);
+		return mapList;
+	}
+
+	private void gentTree(String extId, List<Map<String, Object>> mapList, List<PmTree> list) {
 		for (int i = 0; i < list.size(); i++) {
 			PmTree e = list.get(i);
 			if (StringUtils.isBlank(extId) || (extId != null && !extId.equals(e.getId())
@@ -155,7 +171,6 @@ public class PmTreeController extends BaseController {
 				mapList.add(map);
 			}
 		}
-		return mapList;
 	}
 
 }

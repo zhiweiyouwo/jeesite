@@ -17,8 +17,7 @@
 		    	<a class="accordion-toggle">我的项目<i class="icon-refresh pull-right" onclick="refreshTree();"></i></a>
 		    </div>
 		    <div class="input-append">
-				<input id="companyId" name="company.id" class="input-small" type="hidden" value="">
-				<input id="companyName" name="company.name" readonly="readonly" type="text" value="" data-msg-required="" class="input-small" style=""><a id="companyButton" href="javascript:" class="btn  " style="">&nbsp;<i class="icon-search"></i>&nbsp;</a>&nbsp;&nbsp;
+				<input id="pmname" type="text" placeholder="项目名" value="" data-msg-required="" class="input-small" style=""><a id="searchbutton" href="javascript:searchprojects()" class="btn  " style="">&nbsp;<i class="icon-search"></i>&nbsp;</a>&nbsp;&nbsp;
 			</div>
 			<div id="ztree" class="ztree"></div>
 		</div>
@@ -28,6 +27,11 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+		function searchprojects(){
+			$.getJSON("${ctx}/pm/pmTree/treeDataMy",{pname:$("#pmname").val()},function(data){
+				$.fn.zTree.init($("#ztree"), setting, data).expandAll(true);
+			});
+		}
 		var setting = {data:{simpleData:{enable:true,idKey:"id",pIdKey:"pId",rootPId:'0'}},
 			callback:{onClick:function(event, treeId, treeNode){
 					var id = treeNode.id == '0' ? '' :treeNode.id;
@@ -37,7 +41,8 @@
 		};
 		
 		function refreshTree(){
-			$.getJSON("${ctx}/pm/pmTree/treeData",function(data){
+			$("#pmname").val("");
+			$.getJSON("${ctx}/pm/pmTree/treeDataMy",function(data){
 				$.fn.zTree.init($("#ztree"), setting, data).expandAll(true);
 			});
 		}

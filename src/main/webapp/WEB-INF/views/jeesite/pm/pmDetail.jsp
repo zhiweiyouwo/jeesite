@@ -11,7 +11,12 @@
 					if($("#files").val()){
 						s();
 					}else{
+						//<c:if test="${testTree.parent!=null}">
 						confirmx("当前没有选择任何文件,是否保存?", s);
+						//</c:if>
+						//<c:if test="${testTree.parent==null}">
+						s();
+						//</c:if>
 					}
 					function s(){
 						loading('正在提交，请稍等...');
@@ -55,9 +60,10 @@
 			<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:textarea path="remarks" htmlEscape="false" rows="10" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+		<c:if test="${testTree.parent!=null}">
 		<div class="control-group">
 				<label class="control-label">附件：</label>
 				<div class="controls">
@@ -65,6 +71,7 @@
 					<sys:ckfinder input="files" type="files" uploadPath="/pm" selectMultiple="true"/>
 				</div>
 			</div>
+			</c:if>
 		<div class="form-actions">
 			<shiro:hasPermission name="pm:pmTree:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 		</div>
