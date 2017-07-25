@@ -24,6 +24,8 @@ import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.pm.entity.PmTree;
 import com.thinkgem.jeesite.pm.service.PmTreeService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -40,6 +42,9 @@ public class PmTreeController extends BaseController {
 
 	@Autowired
 	private PmTreeService pmTreeService;
+	
+	@Autowired
+	private SystemService systemService;
 
 	@RequiresPermissions("pm:pmTree:view")
 	@RequestMapping(value = { "index" })
@@ -104,6 +109,22 @@ public class PmTreeController extends BaseController {
 		if (testTree.getSort() == null) {
 			testTree.setSort(30);
 		}
+		String userIds = testTree.getUserids();
+		String names = "";
+		if(StringUtils.isNotBlank(userIds)){
+			for(String userId : userIds.split(","))
+			{
+				User user = systemService.getUser(userId);
+				if(user != null){
+					names += ","+user.getName();
+				}
+			}
+			if(names.length()>0){
+				names = names.substring(1);
+			}
+			testTree.setUsernames(names);
+		}
+		
 		model.addAttribute("testTree", testTree);
 	}
 
@@ -151,10 +172,13 @@ public class PmTreeController extends BaseController {
 	@RequiresPermissions("user")
 	@ResponseBody
 	@RequestMapping(value = "treeDataMy")
-	public List<Map<String, Object>> treeDataMy(@RequestParam(required = false) String extId,  String pname,
+	public List<Map<String, Object>> treeDataMy(@RequestParam(required = false) String extId, String pname,
 			HttpServletRequest request, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
-		List<PmTree> list = pmTreeService.findList(new PmTree());
+		PmTree testTree = new PmTree();
+		testTree.setName(pname);
+		testTree.setUserid(UserUtils.getPrincipal().getId());
+		List<PmTree> list = pmTreeService.findList(testTree);
 		gentTree(extId, mapList, list);
 		return mapList;
 	}

@@ -44,7 +44,7 @@
 		<div class="control-group">
 			<label class="control-label">选择访问权限:</label>
 			<div class="controls">
-				
+				<sys:treeselect id="userids" name="userids" value="${pmTree.userids}" labelName="${pmTree.usernames}" labelValue="${pmTree.usernames}" title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" checked="true"/>	
 			</div>
 		</div>
 		</c:if>

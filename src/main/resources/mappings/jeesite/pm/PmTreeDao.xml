@@ -14,6 +14,7 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.userids AS "userids",
 		a.FILES AS "files"
 	</sql>
 	
@@ -45,10 +46,14 @@
 					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
 			</if>
 			<if test="name != null and name != ''">
-				AND a.name LIKE 
+				AND (a.parent_id <> '0' OR
+				a.name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>)
+			</if>
+			<if test="userid != null and userid != '' and userid != '1'">
+				AND a.userids LIKE concat('%',#{userid},'%')
 			</if>
 		</where>
 		ORDER BY a.sort ASC
@@ -69,7 +74,8 @@
 		SELECT
 			a.id,
 			a.parent_id AS "parent.id",
-			a.parent_ids
+			a.parent_ids,
+			<include refid="testTreeColumns"/>
 		FROM pm_tree a
 		<include refid="testTreeJoins"/>
 		<where>
@@ -91,7 +97,8 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			userids
 		) VALUES (
 			#{id},
 			#{parent.id},
@@ -103,7 +110,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{userids}
 		)
 	</insert>
 	
@@ -116,7 +124,8 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
-			files = #{files}
+			files = #{files},
+			userids = #{userids}
 		WHERE id = #{id}
 	</update>
 	

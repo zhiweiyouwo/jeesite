@@ -22,6 +22,9 @@ public class PmTree extends TreeEntity<PmTree> {
 	private String name;		// 名称
 	private Integer sort;		// 排序
 	private String files;		// 附件
+	private String userids;     //拥有查看权限的用户ID, 逗号分隔
+	private String usernames;   //拥有查看权限的用户姓名, 逗号分隔
+	private String userid;
 	
 	public PmTree() {
 		super();
@@ -81,4 +84,30 @@ public class PmTree extends TreeEntity<PmTree> {
 	public void setFiles(String files) {
 		this.files = files;
 	}
+
+	@Length(min=0, max=2000, message="长度必须介于 0 和 2000 之间")
+	public String getUserids() {
+		return userids;
+	}
+
+	public void setUserids(String userids) {
+		this.userids = userids;
+	}
+
+	public String getUsernames() {
+		return usernames;
+	}
+
+	public void setUsernames(String usernames) {
+		this.usernames = usernames;
+	}
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	
 }
