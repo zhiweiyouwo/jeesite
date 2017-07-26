@@ -38,7 +38,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#">${testTree.parent.name} - ${testTree.name}<shiro:hasPermission name="pm:pmTree:edit">查看</shiro:hasPermission><shiro:lacksPermission name="pm:pmTree:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="#">${testTree.parent==null?testTree.name:testTree.parent.name} - ${testTree.name}<shiro:hasPermission name="pm:pmTree:edit">查看</shiro:hasPermission><shiro:lacksPermission name="pm:pmTree:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="testTree" action="${ctx}/pm/pmTree/saveMy" method="post" class="form-horizontal">
 		<form:hidden path="id"/>

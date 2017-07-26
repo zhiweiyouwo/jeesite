@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.pm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -32,7 +33,17 @@ public class PmTreeService extends TreeService<PmTreeDao, PmTree> {
 		if (StringUtils.isNotBlank(testTree.getParentIds())) {
 			testTree.setParentIds("," + testTree.getParentIds() + ",");
 		}
-		return super.findList(testTree);
+		List<PmTree> list = super.findList(testTree);
+		if (StringUtils.isNotBlank(testTree.getName())) {
+			List<PmTree> cList = new ArrayList<PmTree>();
+			for (PmTree pm : list) {
+				PmTree t = new PmTree();
+				t.setParent(pm);
+				cList.addAll(super.findList(t));
+			}
+			list.addAll(cList);
+		}
+		return list;
 	}
 
 	@Transactional(readOnly = false)

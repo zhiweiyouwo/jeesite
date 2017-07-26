@@ -46,11 +46,11 @@
 					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
 			</if>
 			<if test="name != null and name != ''">
-				AND (a.parent_id <> '0' OR
-				a.name LIKE 
+				AND  a.name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>)
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+				AND a.parent_id = #{DEL_FLAG_NORMAL}	
 			</if>
 			<if test="userid != null and userid != '' and userid != '1'">
 				AND a.userids LIKE concat('%',#{userid},'%')
