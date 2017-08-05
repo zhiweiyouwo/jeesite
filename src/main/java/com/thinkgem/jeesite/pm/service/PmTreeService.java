@@ -5,12 +5,15 @@ package com.thinkgem.jeesite.pm.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.service.ServiceException;
 import com.thinkgem.jeesite.common.service.TreeService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.dao.DictDao;
+import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.pm.dao.PmTreeDao;
 import com.thinkgem.jeesite.pm.entity.PmTree;
 
@@ -23,6 +26,9 @@ import com.thinkgem.jeesite.pm.entity.PmTree;
 @Service
 @Transactional(readOnly = true)
 public class PmTreeService extends TreeService<PmTreeDao, PmTree> {
+
+	@Autowired
+	DictDao dictDao;
 
 	public PmTree get(String id) {
 		return super.get(id);
@@ -40,12 +46,20 @@ public class PmTreeService extends TreeService<PmTreeDao, PmTree> {
 		boolean isNew = StringUtils.isBlank(testTree.getId());
 		super.save(testTree);
 		if (testTree.getParent().getId() == "0" && isNew) {
-			PmTree gk = new PmTree();
-			gk.setParent(testTree);
-			gk.setName("概况");
-			gk.setSort(1);
-			gk.setUserid(testTree.getUserid());
-			super.save(gk);
+			Dict d = new Dict();
+			d.setType("pm_folders");
+			List<Dict> dList = dictDao.findList(d);
+			if (dList != null && dList.size() > 0) {
+				int sort = 1;
+				for (String name : dList.get(0).getValue().split(",")) {
+					PmTree gk = new PmTree();
+					gk.setParent(testTree);
+					gk.setName(name);
+					gk.setSort(sort++);
+					gk.setUserid(testTree.getUserid());
+					super.save(gk);
+				}
+			}
 		} else {
 			PmTree o = null;
 			try {
